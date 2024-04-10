@@ -30,16 +30,14 @@ import InfoMobile from './InfoMobile';
 import PaymentForm from './PaymentForm';
 import Review from './Review';
 import ToggleColorMode from './ToggleColorMode';
+import { css } from '@pigment-css/react';
 
 interface ToggleCustomThemeProps {
   showCustomTheme: Boolean;
   toggleCustomTheme: () => void;
 }
 
-function ToggleCustomTheme({
-  showCustomTheme,
-  toggleCustomTheme,
-}: ToggleCustomThemeProps) {
+function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }: ToggleCustomThemeProps) {
   return (
     <Box
       sx={{
@@ -151,7 +149,6 @@ export default function Checkout() {
               startIcon={<ArrowBackRoundedIcon />}
               component="a"
               href="/material-ui/getting-started/templates/landing-page/"
-              sx={{ ml: '-8px' }}
             >
               Back to
               <img
@@ -278,9 +275,7 @@ export default function Checkout() {
                 <Typography variant="subtitle2" gutterBottom>
                   Selected products
                 </Typography>
-                <Typography variant="body1">
-                  {activeStep >= 2 ? '$144.97' : '$134.98'}
-                </Typography>
+                <Typography variant="body1">{activeStep >= 2 ? '$144.97' : '$134.98'}</Typography>
               </div>
               <InfoMobile totalPrice={activeStep >= 2 ? '$144.97' : '$134.98'} />
             </CardContent>
@@ -311,9 +306,7 @@ export default function Checkout() {
                   }}
                   key={label}
                 >
-                  <StepLabel
-                    sx={{ '.MuiStepLabel-labelContainer': { maxWidth: '70px' } }}
-                  >
+                  <StepLabel sx={{ '.MuiStepLabel-labelContainer': { maxWidth: '70px' } }}>
                     {label}
                   </StepLabel>
                 </Step>
@@ -325,8 +318,8 @@ export default function Checkout() {
                 <Typography variant="h5">Thank you for your order!</Typography>
                 <Typography variant="body1" color="text.secondary">
                   Your order number is
-                  <strong>&nbsp;#140396</strong>. We have emailed your order
-                  confirmation and will update you once its shipped.
+                  <strong>&nbsp;#140396</strong>. We have emailed your order confirmation and will
+                  update you once its shipped.
                 </Typography>
                 <Button
                   variant="contained"
@@ -395,10 +388,7 @@ export default function Checkout() {
           </Box>
         </Grid>
       </Grid>
-      <ToggleCustomTheme
-        toggleCustomTheme={toggleCustomTheme}
-        showCustomTheme={showCustomTheme}
-      />
+      <ToggleCustomTheme toggleCustomTheme={toggleCustomTheme} showCustomTheme={showCustomTheme} />
     </ThemeProvider>
   );
 }

@@ -119,7 +119,11 @@ const getDesignTokens = (mode: PaletteMode) => ({
       light: red[50],
       main: red[500],
       dark: red[700],
-      ...(mode === 'dark' && { light: '#D32F2F', main: '#D32F2F', dark: '#B22A2A' }),
+      ...(mode === 'dark' && {
+        light: '#D32F2F',
+        main: '#D32F2F',
+        dark: '#B22A2A',
+      }),
     },
     success: {
       light: green[300],
@@ -225,7 +229,7 @@ export default function getCheckoutTheme(mode: PaletteMode): ThemeOptions {
             '& .MuiAlert-icon': {
               color: orange[500],
             },
-            ...(theme.palette.mode === 'dark' && {
+            ...theme.applyStyles('dark', {
               backgroundColor: `${alpha(orange[900], 0.5)}`,
               border: `1px solid ${alpha(orange[800], 0.5)}`,
             }),
@@ -240,7 +244,7 @@ export default function getCheckoutTheme(mode: PaletteMode): ThemeOptions {
             '& .Mui-selected': {
               color: brand[500],
             },
-            ...(theme.palette.mode === 'dark' && {
+            ...theme.applyStyles('dark', {
               '& .Mui-selected': {
                 color: '#fff',
               },
@@ -256,7 +260,7 @@ export default function getCheckoutTheme(mode: PaletteMode): ThemeOptions {
             textTransform: 'none',
             borderRadius: '10px',
             fontWeight: 500,
-            ...(theme.palette.mode === 'dark' && {
+            ...theme.applyStyles('dark', {
               color: gray[400],
               boxShadow: '0 4px 16px rgba(0, 0, 0, 0.5)',
               '&.Mui-selected': { color: brand[300] },
@@ -282,111 +286,147 @@ export default function getCheckoutTheme(mode: PaletteMode): ThemeOptions {
       },
       MuiButton: {
         styleOverrides: {
-          root: ({ theme, ownerState }) => ({
+          root: ({ theme }) => ({
             boxShadow: 'none',
             borderRadius: '10px',
             textTransform: 'none',
-            ...(ownerState.size === 'small' && {
-              maxHeight: '32px',
-            }),
-            ...(ownerState.size === 'medium' && {
-              height: '40px',
-            }),
-            ...(ownerState.variant === 'contained' &&
-              ownerState.color === 'primary' && {
-                color: brand[50],
-                backgroundColor: brand[500],
-                backgroundImage: `linear-gradient(to bottom, ${brand[400]}, ${brand[500]})`,
-                boxShadow: `inset 0 1px ${alpha(
-                  brand[300],
-                  0.5,
-                )}, inset 0 -2px ${alpha(brand[700], 0.5)}`,
-                border: `1px solid ${brand[500]}`,
-                '&:hover': {
-                  backgroundColor: brand[400],
-                  backgroundImage: 'none',
-                  boxShadow: `0 0 0 1px  ${alpha(brand[300], 0.5)}`,
+            variants: [
+              {
+                props: { size: 'small' },
+                style: {
+                  height: '2rem', // 32px
+                  padding: '0 0.5rem',
                 },
-              }),
-            ...(ownerState.variant === 'outlined' && {
-              backgroundColor: alpha(brand[300], 0.1),
-              borderColor: brand[300],
-              color: brand[500],
-              '&:hover': {
-                backgroundColor: alpha(brand[300], 0.3),
-                borderColor: brand[200],
               },
-            }),
-            ...(ownerState.variant === 'text' && {
-              color: brand[500],
-              '&:hover': {
-                backgroundColor: alpha(brand[300], 0.3),
-                borderColor: brand[200],
+              {
+                props: { size: 'medium' },
+                style: {
+                  height: '2.5rem', // 40px
+                },
               },
-            }),
-            ...(theme.palette.mode === 'dark' && {
-              ...(ownerState.variant === 'contained' &&
-                ownerState.color === 'primary' && {
-                  border: `1px solid ${brand[600]}`,
-                  backgroundImage: 'none',
+              {
+                props: { variant: 'contained', color: 'primary' },
+                style: {
+                  color: brand[50],
                   backgroundColor: brand[500],
+                  backgroundImage: `linear-gradient(to bottom, ${brand[400]}, ${brand[500]})`,
+                  boxShadow: `inset 0 1px ${alpha(brand[300], 0.5)}, inset 0 -2px ${alpha(
+                    brand[700],
+                    0.5,
+                  )}`,
+                  border: `1px solid ${brand[500]}`,
                   '&:hover': {
-                    background: brand[600],
+                    backgroundColor: brand[400],
                     backgroundImage: 'none',
-                    boxShadow: `0 0 0 1px  ${alpha(brand[700], 0.5)}`,
+                    boxShadow: `0 0 0 1px  ${alpha(brand[300], 0.5)}`,
                   },
-                }),
-              ...(ownerState.variant === 'outlined' && {
-                backgroundColor: alpha(brand[600], 0.1),
-                borderColor: brand[700],
-                color: brand[300],
-                '&:hover': {
-                  backgroundColor: alpha(brand[600], 0.3),
-                  borderColor: brand[700],
                 },
-              }),
-              ...(ownerState.variant === 'text' && {
-                color: brand[300],
-                '&:hover': {
-                  backgroundColor: alpha(brand[600], 0.3),
-                  borderColor: brand[700],
+              },
+              {
+                props: {
+                  variant: 'outlined',
                 },
-              }),
-            }),
+                style: {
+                  backgroundColor: alpha(brand[300], 0.1),
+                  borderColor: brand[300],
+                  color: brand[500],
+                  '&:hover': {
+                    backgroundColor: alpha(brand[300], 0.3),
+                    borderColor: brand[200],
+                  },
+                },
+              },
+              {
+                props: { variant: 'text' },
+                style: {
+                  color: brand[500],
+                  '&:hover': {
+                    backgroundColor: alpha(brand[300], 0.3),
+                    borderColor: brand[200],
+                  },
+                },
+              },
+              {
+                props: { variant: 'contained', color: 'primary' },
+                style: {
+                  ...theme.applyStyles('dark', {
+                    border: `1px solid ${brand[600]}`,
+                    backgroundImage: 'none',
+                    backgroundColor: brand[500],
+                    '&:hover': {
+                      background: brand[600],
+                      backgroundImage: 'none',
+                      boxShadow: `0 0 0 1px  ${alpha(brand[700], 0.5)}`,
+                    },
+                  }),
+                },
+              },
+              {
+                props: { variant: 'outlined' },
+                style: {
+                  ...theme.applyStyles('dark', {
+                    backgroundColor: alpha(brand[600], 0.1),
+                    borderColor: brand[700],
+                    color: brand[300],
+                    '&:hover': {
+                      backgroundColor: alpha(brand[600], 0.3),
+                      borderColor: brand[700],
+                    },
+                  }),
+                },
+              },
+              {
+                props: { variant: 'text' },
+                style: {
+                  ...theme.applyStyles('dark', {
+                    color: brand[300],
+                    '&:hover': {
+                      backgroundColor: alpha(brand[600], 0.3),
+                      borderColor: brand[700],
+                    },
+                  }),
+                },
+              },
+            ],
           }),
         },
       },
       MuiCard: {
         styleOverrides: {
-          root: ({ theme, ownerState }) => ({
+          root: ({ theme }) => ({
             backgroundColor: gray[50],
             borderRadius: 10,
             outline: `1px solid ${alpha(gray[200], 0.8)}`,
             boxShadow: 'none',
             transition: 'background-color, border, 80ms ease',
-            ...(ownerState.variant === 'outlined' && {
-              boxSizing: 'border-box',
-              background: `linear-gradient(to bottom, #FFF, ${gray[50]})`,
-              '&:hover': {
-                borderColor: brand[300],
-                boxShadow: `0 0 24px ${brand[100]}`,
-              },
-            }),
-            ...(theme.palette.mode === 'dark' && {
+            ...theme.applyStyles('dark', {
               backgroundColor: alpha(gray[800], 0.6),
               outline: `1px solid ${alpha(gray[700], 0.3)}`,
-              ...(ownerState.variant === 'outlined' && {
-                boxSizing: 'border-box',
-                background: `linear-gradient(to bottom, ${gray[900]}, ${alpha(
-                  gray[800],
-                  0.5,
-                )})`,
-                '&:hover': {
-                  borderColor: brand[700],
-                  boxShadow: `0 0 24px ${brand[800]}`,
-                },
-              }),
             }),
+            variants: [
+              {
+                props: { variant: 'outlined' },
+                style: {
+                  boxSizing: 'border-box',
+                  background: `linear-gradient(to bottom, #FFF, ${gray[50]})`,
+                  '&:hover': {
+                    borderColor: brand[300],
+                    boxShadow: `0 0 24px ${brand[100]}`,
+                  },
+                  ...theme.applyStyles('dark', {
+                    boxSizing: 'border-box',
+                    background: `linear-gradient(to bottom, ${gray[900]}, ${alpha(
+                      gray[800],
+                      0.5,
+                    )})`,
+                    '&:hover': {
+                      borderColor: brand[700],
+                      boxShadow: `0 0 24px ${brand[800]}`,
+                    },
+                  }),
+                },
+              },
+            ],
           }),
         },
       },
@@ -394,7 +434,7 @@ export default function getCheckoutTheme(mode: PaletteMode): ThemeOptions {
         styleOverrides: {
           root: ({ theme }) => ({
             borderColor: `${alpha(gray[200], 0.8)}`,
-            ...(theme.palette.mode === 'dark' && {
+            ...theme.applyStyles('dark', {
               borderColor: `${alpha(gray[700], 0.4)}`,
             }),
           }),
@@ -405,7 +445,7 @@ export default function getCheckoutTheme(mode: PaletteMode): ThemeOptions {
           root: ({ theme }) => ({
             backgroundImage: 'none',
             backgroundColor: gray[100],
-            ...(theme.palette.mode === 'dark' && {
+            ...theme.applyStyles('dark', {
               backgroundColor: gray[800],
             }),
           }),
@@ -441,7 +481,7 @@ export default function getCheckoutTheme(mode: PaletteMode): ThemeOptions {
               outline: '4px solid',
               outlineColor: brand[200],
             },
-            ...(theme.palette.mode === 'dark' && {
+            ...theme.applyStyles('dark', {
               '& .MuiInputBase-input': {
                 '&::placeholder': {
                   opacity: 1,
@@ -520,23 +560,44 @@ export default function getCheckoutTheme(mode: PaletteMode): ThemeOptions {
                 outlineColor: brand[200],
               },
             },
-            ...(ownerState.variant === 'standard' && {
-              '&.MuiTextField-root': {
-                '& .MuiInput-root:hover:not(.Mui-disabled, .Mui-error):before': {
-                  borderColor: brand[200],
+            variants: [
+              {
+                props: { variant: 'standard' },
+                style: {
+                  '&.MuiTextField-root': {
+                    '& .MuiInput-root:hover:not(.Mui-disabled, .Mui-error):before': {
+                      borderColor: brand[200],
+                    },
+                  },
+                  '& :before': {
+                    borderBottom: '1px solid',
+                    borderColor: gray[200],
+                  },
+                  '&:hover': {
+                    '& :before': {
+                      borderColor: brand[300],
+                    },
+                  },
+                  ...theme.applyStyles('dark', {
+                    '&.MuiTextField-root': {
+                      '& .MuiInput-root:hover:not(.Mui-disabled, .Mui-error):before': {
+                        borderColor: brand[200],
+                      },
+                    },
+                    '& :before': {
+                      borderBottom: '1px solid',
+                      borderColor: gray[700],
+                    },
+                    '&:hover': {
+                      '& :before': {
+                        borderColor: brand[300],
+                      },
+                    },
+                  }),
                 },
               },
-              '& :before': {
-                borderBottom: '1px solid',
-                borderColor: gray[200],
-              },
-              '&:hover': {
-                '& :before': {
-                  borderColor: brand[300],
-                },
-              },
-            }),
-            ...(theme.palette.mode === 'dark' && {
+            ],
+            ...theme.applyStyles('dark', {
               '& .MuiInputBase-input': {
                 '&::placeholder': {
                   opacity: 1,
@@ -564,22 +625,6 @@ export default function getCheckoutTheme(mode: PaletteMode): ThemeOptions {
                   outlineColor: alpha(brand[500], 0.5),
                 },
               },
-              ...(ownerState.variant === 'standard' && {
-                '&.MuiTextField-root': {
-                  '& .MuiInput-root:hover:not(.Mui-disabled, .Mui-error):before': {
-                    borderColor: brand[200],
-                  },
-                },
-                '& :before': {
-                  borderBottom: '1px solid',
-                  borderColor: gray[700],
-                },
-                '&:hover': {
-                  '& :before': {
-                    borderColor: brand[300],
-                  },
-                },
-              }),
             }),
           }),
         },
@@ -599,7 +644,7 @@ export default function getCheckoutTheme(mode: PaletteMode): ThemeOptions {
           label: ({ theme }) => ({
             '&.Mui-completed': {
               opacity: 0.4,
-              ...(theme.palette.mode === 'dark' && { opacity: 0.3 }),
+              ...theme.applyStyles('dark', { opacity: 0.3 }),
             },
           }),
         },
@@ -608,10 +653,10 @@ export default function getCheckoutTheme(mode: PaletteMode): ThemeOptions {
         variants: [
           {
             props: { completed: true },
-            style: () => ({
+            style: {
               width: 12,
               height: 12,
-            }),
+            },
           },
         ],
         styleOverrides: {
@@ -632,7 +677,7 @@ export default function getCheckoutTheme(mode: PaletteMode): ThemeOptions {
               border: 'none',
               color: theme.palette.success.main,
             },
-            ...(theme.palette.mode === 'dark' && {
+            ...theme.applyStyles('dark', {
               border: `1px solid ${gray[700]}`,
               '&.Mui-active': {
                 border: 'none',
